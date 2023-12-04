@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String selectedCategory = "All";
-  String url = "http://192.168.19.208:3000/api/species?perpage=1000";
+  String url = "https://tree-info.onrender.com/api/species?perpage=1000";
 
   ApiResponse parseResponse(String? responseBody) {
     if (responseBody == null || responseBody.isEmpty) {
