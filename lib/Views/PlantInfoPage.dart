@@ -18,9 +18,11 @@ class PlantInfoPage extends StatefulWidget {
 
 class _PlantInfoPageState extends State<PlantInfoPage> {
   late PlantInfo plantInfo;
-  Future<PlantInfo> fetchPlantInfo(String name) async {
+  Future<PlantInfo> fetchPlantInfo(
+      String name, String sourceLang, String destLang) async {
+    final treeName = translate(name, sourceLang, destLang);
     final response = await http.get(Uri.parse(
-        "https://tree-info.onrender.com/api/species/plantinfo?treeName=$name"));
+        "https://tree-info.onrender.com/api/species/plantinfo?treeName=$treeName"));
     debugPrint("Status Code: ${response.statusCode}");
     debugPrint("Response Body: ${response.body}");
     if (response.statusCode == 200) {
@@ -30,13 +32,26 @@ class _PlantInfoPageState extends State<PlantInfoPage> {
     }
   }
 
+  translate(String text, String sourceLang, String destLang) async {
+    final response = await http.get(Uri.parse(
+        "https://tree-info.onrender.com/api/species/translate?word=$text&source_lang=$sourceLang&dest_lang=$destLang"));
+    debugPrint("Status Code: ${response.statusCode}");
+    debugPrint("Response Body: ${response.body}");
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     debugPrint("Plant Name: ${widget.plant.commonName}");
-    fetchPlantInfo(widget.plant.commonName).then((value) => setState(() {
-          plantInfo = value;
-        }));
+    fetchPlantInfo(widget.plant.commonName, 'bn', 'en')
+        .then((value) => setState(() {
+              plantInfo = value;
+            }));
   }
 
   @override
@@ -46,7 +61,7 @@ class _PlantInfoPageState extends State<PlantInfoPage> {
         title: Text(widget.plant.commonName),
       ),
       body: FutureBuilder<PlantInfo>(
-        future: fetchPlantInfo(widget.plant.commonName),
+        future: fetchPlantInfo(widget.plant.commonName, 'bn', 'bn'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(
@@ -87,7 +102,7 @@ class _PlantInfoPageState extends State<PlantInfoPage> {
                           ),
                         ),
                         Text(
-                          snapshot.data!.introduction,
+                          translate(snapshot.data!.introduction, "en", "bn"),
                           style: const TextStyle(
                             fontSize: 16.0,
                           ),
@@ -101,7 +116,7 @@ class _PlantInfoPageState extends State<PlantInfoPage> {
                           ),
                         ),
                         Text(
-                          snapshot.data!.description,
+                          translate(snapshot.data!.description, "en", "bn"),
                           style: const TextStyle(
                             fontSize: 16.0,
                           ),
@@ -115,7 +130,7 @@ class _PlantInfoPageState extends State<PlantInfoPage> {
                           ),
                         ),
                         Text(
-                          snapshot.data!.ecology,
+                          translate(snapshot.data!.ecology, "en", "bn"),
                           style: const TextStyle(
                             fontSize: 16.0,
                           ),
@@ -129,7 +144,7 @@ class _PlantInfoPageState extends State<PlantInfoPage> {
                           ),
                         ),
                         Text(
-                          snapshot.data!.uses,
+                          translate(snapshot.data!.uses, "en", "bn"),
                           style: const TextStyle(
                             fontSize: 16.0,
                           ),
