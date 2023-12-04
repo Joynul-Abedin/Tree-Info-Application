@@ -6,7 +6,7 @@ class TopSectionWithUserImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 60.0, left: 30.0, right: 30.0),
+      padding: const EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -18,7 +18,8 @@ class TopSectionWithUserImage extends StatelessWidget {
             ),
           ),
           Stack(
-            alignment: Alignment.topRight, // Aligns the status indicator to the top right
+            alignment: Alignment
+                .topRight, // Aligns the status indicator to the top right
             children: [
               const CircleAvatar(
                 backgroundImage: NetworkImage(
@@ -31,7 +32,8 @@ class TopSectionWithUserImage extends StatelessWidget {
                   color: Colors.green, // Active status color
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.white, // Border to distinguish from the avatar
+                    color:
+                        Colors.white, // Border to distinguish from the avatar
                     width: 2.0,
                   ),
                 ),
